@@ -1,0 +1,36 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27130.2010
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "World Builder", "World Builder.csproj", "{A01AA190-5C41-40DB-03CD-B986D17EB346}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "World Builder.Editor", "World Builder.Editor.csproj", "{AEF3494D-3014-2CA1-73F1-29EAC76C425E}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Chunk", "..\Chunk\Chunk.shproj", "{18949574-4FDB-45D4-88D2-38BB6F757FE0}"
+EndProject
+Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		..\Chunk\Chunk.projitems*{18949574-4fdb-45d4-88d2-38bb6f757fe0}*SharedItemsImports = 13
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A01AA190-5C41-40DB-03CD-B986D17EB346}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A01AA190-5C41-40DB-03CD-B986D17EB346}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A01AA190-5C41-40DB-03CD-B986D17EB346}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A01AA190-5C41-40DB-03CD-B986D17EB346}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AEF3494D-3014-2CA1-73F1-29EAC76C425E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AEF3494D-3014-2CA1-73F1-29EAC76C425E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AEF3494D-3014-2CA1-73F1-29EAC76C425E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AEF3494D-3014-2CA1-73F1-29EAC76C425E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {CC1A2848-2D0E-44BD-91BD-949E10FB7D82}
+	EndGlobalSection
+EndGlobal
