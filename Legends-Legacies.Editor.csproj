@@ -275,6 +275,7 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\Editor\ChunkEditor.cs" />
     <Compile Include="Assets\Scripts\Editor\ReadOnlyDrawer.cs" />
+    <Compile Include="Assets\Scripts\Editor\TerrainTile_TilePrefabs.cs" />
     <Compile Include="Assets\Scripts\Editor\Tests\ChunkTests.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

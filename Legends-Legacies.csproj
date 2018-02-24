@@ -230,7 +230,6 @@
     <Compile Include="Assets\Scripts\Serialization\ChunkData.cs" />
     <Compile Include="Assets\Scripts\Serialization\IHasSerializableData.cs" />
     <Compile Include="Assets\Scripts\Serialization\LocationData.cs" />
-    <Compile Include="Assets\Scripts\Serialization\TerrainTileData.cs" />
     <Compile Include="Assets\Scripts\Serialization\WorldData.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
