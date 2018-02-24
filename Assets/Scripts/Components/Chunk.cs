@@ -149,7 +149,7 @@ namespace Assets.Scripts.Components
             {
                 for (int j = 0; j < size; j++)
                 {
-                    data.terrainTileData[i, j] = terrainTiles[i, j].GetSerializableData();
+                    data.tilePrefabIndex[i, j] = terrainTiles[i, j].prefabIndex;
                 }
             }
             return data;
@@ -164,8 +164,8 @@ namespace Assets.Scripts.Components
             {
                 for (int j = 0; j < terrainTiles.GetLength(1); j++)
                 {
-                    InstantiateTile(new TerrainTile.Indices(i, j), data.terrainTileData[i, j].prefabIndex);
-                    terrainTiles[i, j].SetFromSerializableData(data.terrainTileData[i, j]);
+                    InstantiateTile(new TerrainTile.Indices(i, j), data.tilePrefabIndex[i, j]);
+                    terrainTiles[i, j].prefabIndex = data.tilePrefabIndex[i,j];
                 }
             }
 

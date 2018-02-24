@@ -6,7 +6,7 @@ using Assets.Scripts.Serialization;
 
 namespace Assets.Scripts.Components
 {
-    public class TerrainTile : MonoBehaviour, IHasSerializableData<TerrainTileData>
+    public class TerrainTile : MonoBehaviour
     {
 
         [Serializable]
@@ -26,17 +26,7 @@ namespace Assets.Scripts.Components
         public Indices indices;
         public TerrainType terrainType;
         public float speedModifier;
-        public int prefabIndex;
-
-        public TerrainTileData GetSerializableData()
-        {
-            return new TerrainTileData(prefabIndex);
-        }
-
-        public void SetFromSerializableData(TerrainTileData data)
-        {
-            prefabIndex = data.prefabIndex;
-        }
+        [ReadOnly]public int prefabIndex;
 
         public void RefreshName()
         {
@@ -54,17 +44,6 @@ namespace Assets.Scripts.Components
                 }
             }
         }
-
-        [ContextMenu("Refresh")]
-        private void RefreshFromMenu()
-        {
-            Chunk parentChunk = GetComponentInParent<Chunk>();
-            if (parentChunk)
-            {
-                parentChunk.ReplaceTile(indices, prefabIndex);
-            }
-        }
-
     }
 
 }

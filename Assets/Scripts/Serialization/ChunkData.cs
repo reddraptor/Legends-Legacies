@@ -9,14 +9,14 @@ namespace Assets.Scripts.Serialization
     public class ChunkData
     {
         public int tileSetIndex;
-        public TerrainTileData[,] terrainTileData;
+        public int[,] tilePrefabIndex;
         public int size;
         
         public ChunkData(int tileSetIndex, int size )
         {
             this.tileSetIndex = tileSetIndex;
             this.size = size;
-            terrainTileData = new TerrainTileData[size, size];
+            tilePrefabIndex = new int[size, size];
         }
 
         public override string ToString()
