@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using Assets.Scripts.EditorAttributes;
-using Assets.Scripts.Serialization;
+using UnityEditor;
 
 
 namespace Assets.Scripts.Components
@@ -28,21 +28,9 @@ namespace Assets.Scripts.Components
         public float speedModifier;
         [ReadOnly]public int prefabIndex;
 
-        public void RefreshName()
+        private void Awake()
         {
-            name = "Terrain Tile (" + indices.i + ", " + indices.j + ") : " + prefabIndex;
-        }
-
-        private void Update()
-        {
-            Chunk parentChunk = GetComponentInParent<Chunk>();
-            if (parentChunk)
-            {
-                if (transform.position != parentChunk.CalculatedPositionForTileAt(indices))
-                {
-                    parentChunk.ResetTilePosition(indices);
-                }
-            }
+            name = name + "(" + prefabIndex + ") [" + indices.i + ", " + indices.j + "]";
         }
     }
 

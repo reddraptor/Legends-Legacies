@@ -97,6 +97,7 @@ namespace Assets.Scripts.Components
 
                     if (terrainTile.indices.i != i) terrainTile.indices.i = i;
                     if (terrainTile.indices.j != j) terrainTile.indices.j = j;
+                    if (terrainTile.transform.position != CalculatedPositionForTileAt(terrainTile.indices)) ResetTilePosition(terrainTile.indices);
                 }
             }
         }
@@ -124,7 +125,6 @@ namespace Assets.Scripts.Components
                     terrainTiles[tileIndices.i, tileIndices.j] = terrainTileComponent;
                     terrainTiles[tileIndices.i, tileIndices.j].indices = tileIndices;
                     terrainTiles[tileIndices.i, tileIndices.j].prefabIndex = terrainTilePrefabIndex;
-                    terrainTiles[tileIndices.i, tileIndices.j].RefreshName();
                 }
                 else
                 {

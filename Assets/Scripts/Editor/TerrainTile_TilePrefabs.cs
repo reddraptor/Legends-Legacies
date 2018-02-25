@@ -1,12 +1,17 @@
 ﻿using UnityEngine;
 using UnityEditor;
+using Assets.Scripts.Components;
+using Assets.Scripts.ScriptableObjects;
+
 
 public class TerrainTile_TilePrefabs : EditorWindow
 {
-    string myString = "Hello World";
-    bool groupEnabled;
-    bool myBool = true;
-    float myFloat = 1.23f;
+    string tileName;
+    TerrainTile terrainTile;
+    GameObject selection;
+    Chunk parentChunk;
+    TileSet tileSet;
+    
 
     [MenuItem("CONTEXT/TerrainTile/Tile Prefabs")]
     public static void ShowWindow()
@@ -16,13 +21,26 @@ public class TerrainTile_TilePrefabs : EditorWindow
 
     void OnGUI()
     {
-        titleContent.text = "Tile Prefabs";
-        GUILayout.Label("Base Settings", EditorStyles.boldLabel);
-        myString = EditorGUILayout.TextField("Text Field", myString);
+        selection = Selection.activeGameObject;
+        if (selection) terrainTile = selection.GetComponent<TerrainTile>();
+        if (terrainTile) parentChunk = terrainTile.GetComponentInParent<Chunk>();
+        if (parentChunk) tileSet = parentChunk.GetTileSet();
 
-        groupEnabled = EditorGUILayout.BeginToggleGroup("Optional Settings", groupEnabled);
-        myBool = EditorGUILayout.Toggle("Toggle", myBool);
-        myFloat = EditorGUILayout.Slider("Slider", myFloat, -3, 3);
-        EditorGUILayout.EndToggleGroup();
+        titleContent.text = "Tile Prefabs";
+
+        if (selection && terrainTile)
+        {
+            tileName = terrainTile.name;
+        }
+        else
+        {
+            tileName = "No selection";
+        }
+
+        GUILayout.Label(tileName, EditorStyles.boldLabel);
+        //GUILayout.SelectionGrid(terrainTile.prefabIndex, )
+
+        tileName = EditorGUILayout.TextField("Text Field", tileName);
+
     }
 }
