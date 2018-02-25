@@ -11,6 +11,9 @@ public class TerrainTile_TilePrefabs : EditorWindow
     GameObject selection;
     Chunk parentChunk;
     TileSet tileSet;
+    GameObject[] tilePrefabs;
+    string[] tilePrefabNames;
+    int prefabSelect;
     
 
     [MenuItem("CONTEXT/TerrainTile/Tile Prefabs")]
@@ -37,10 +40,17 @@ public class TerrainTile_TilePrefabs : EditorWindow
             tileName = "No selection";
         }
 
+        tilePrefabs = tileSet.terrainTilePrefabs;
+        tilePrefabNames = tileSet.GetTilePrefabNames();
+
         GUILayout.Label(tileName, EditorStyles.boldLabel);
-        //GUILayout.SelectionGrid(terrainTile.prefabIndex, )
+        prefabSelect = GUILayout.SelectionGrid(terrainTile.prefabIndex, tilePrefabNames, 1);
+
+        if (prefabSelect != terrainTile.prefabIndex)
+        {
+            parentChunk.ReplaceTile(terrainTile.indices, prefabSelect);
+        }
 
         tileName = EditorGUILayout.TextField("Text Field", tileName);
-
     }
 }
