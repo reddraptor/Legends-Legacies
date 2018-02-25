@@ -11,15 +11,20 @@ public class TerrainTile_TilePrefabs : EditorWindow
     GameObject selection;
     Chunk parentChunk;
     TileSet tileSet;
-    GameObject[] tilePrefabs;
-    string[] tilePrefabNames;
     int prefabSelect;
+    TerrainTile.Indices indices;
+    GUIContent[] tileSetContents;
     
 
     [MenuItem("CONTEXT/TerrainTile/Tile Prefabs")]
     public static void ShowWindow()
     {
         GetWindow(typeof(TerrainTile_TilePrefabs));
+    }
+
+    private void OnInspectorUpdate()
+    {
+        Repaint();
     }
 
     void OnGUI()
@@ -31,8 +36,15 @@ public class TerrainTile_TilePrefabs : EditorWindow
 
         titleContent.text = "Tile Prefabs";
 
-        if (selection && terrainTile)
+        if (selection && terrainTile && parentChunk && tileSet)
         {
+            tileSetContents = new GUIContent[tileSet.terrainTilePrefabs.Length];
+            for (int i = 0; i < tileSet.terrainTilePrefabs.Length; i++)
+            {
+                Texture2D thumbnail = AssetPreview.GetAssetPreview(tileSet.terrainTilePrefabs[i]);
+                tileSetContents[i] = new GUIContent(tileSet.terrainTilePrefabs[i].name, thumbnail);
+            }
+            
             tileName = terrainTile.name;
         }
         else
@@ -40,17 +52,20 @@ public class TerrainTile_TilePrefabs : EditorWindow
             tileName = "No selection";
         }
 
-        tilePrefabs = tileSet.terrainTilePrefabs;
-        tilePrefabNames = tileSet.GetTilePrefabNames();
 
         GUILayout.Label(tileName, EditorStyles.boldLabel);
-        prefabSelect = GUILayout.SelectionGrid(terrainTile.prefabIndex, tilePrefabNames, 1);
 
-        if (prefabSelect != terrainTile.prefabIndex)
+        if (selection && terrainTile && parentChunk && tileSet)
         {
-            parentChunk.ReplaceTile(terrainTile.indices, prefabSelect);
-        }
+            GUILayout.Label("Tile Set: " + tileSet.name);
 
-        tileName = EditorGUILayout.TextField("Text Field", tileName);
+            prefabSelect = GUILayout.SelectionGrid(terrainTile.prefabIndex, tileSetContents, 1);
+            if (prefabSelect != terrainTile.prefabIndex)
+            {
+                indices = terrainTile.indices;
+                parentChunk.ReplaceTile(indices, prefabSelect);
+                Selection.activeGameObject = parentChunk.GetTerrainTileAt(indices).gameObject;
+            }
+        }
     }
 }
