@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using Assets.Scripts.Serialization;
+using System;
 
 namespace Assets.Scripts.Components
 {

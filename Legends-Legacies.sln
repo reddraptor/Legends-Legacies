@@ -5,6 +5,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Legends-Legacies", "Legends
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Legends-Legacies.Editor", "Legends-Legacies.Editor.csproj", "{EDBD4450-2525-416F-1AB7-328CACE8BB1D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Legends-Legacies-old", "..\Legends-Legacies_old\Legends-Legacies-old.csproj", "{0241B86B-7415-4C9C-ACCA-4FC61AF07402}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,6 +21,10 @@ Global
 		{EDBD4450-2525-416F-1AB7-328CACE8BB1D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EDBD4450-2525-416F-1AB7-328CACE8BB1D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EDBD4450-2525-416F-1AB7-328CACE8BB1D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0241B86B-7415-4C9C-ACCA-4FC61AF07402}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0241B86B-7415-4C9C-ACCA-4FC61AF07402}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0241B86B-7415-4C9C-ACCA-4FC61AF07402}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0241B86B-7415-4C9C-ACCA-4FC61AF07402}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

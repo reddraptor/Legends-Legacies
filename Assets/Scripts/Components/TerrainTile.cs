@@ -28,8 +28,9 @@ namespace Assets.Scripts.Components
         public float speedModifier;
         [ReadOnly]public int prefabIndex;
 
-        private void Awake()
+        private void Start()
         {
+            GetComponent<BoxCollider2D>().enabled = false;
             name = name + "(" + prefabIndex + ") [" + indices.i + ", " + indices.j + "]";
         }
     }
