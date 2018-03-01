@@ -90,7 +90,7 @@ namespace Assets.Scripts.Editor.Tests
             Assert.That(chunkData.tileSetIndex, Is.EqualTo(TEST_TILE_SET_INDEX));
             Assert.That(chunkData.size, Is.EqualTo(chunk.size));
             Assert.That(
-                chunkData.tilePrefabIndex[TEST_REPLACEMENT_TILE_INDICES.i, TEST_REPLACEMENT_TILE_INDICES.j],
+                chunkData.terrainTileData[TEST_REPLACEMENT_TILE_INDICES.i, TEST_REPLACEMENT_TILE_INDICES.j].prefabIndex,
                 Is.EqualTo(TEST_REPLACEMENT_TERRAINTILE_INDEX)
                 );
 

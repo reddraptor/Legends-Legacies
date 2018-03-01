@@ -6,7 +6,7 @@ using UnityEditor;
 
 namespace Assets.Scripts.Components
 {
-    public class TerrainTile : MonoBehaviour
+    public class TerrainTile : MonoBehaviour, IHasSerializableData<TerrainTileData>
     {
 
         [Serializable]
@@ -26,13 +26,34 @@ namespace Assets.Scripts.Components
         public Indices indices;
         public TerrainType terrainType;
         public float speedModifier;
-        [ReadOnly]public int prefabIndex;
+        public int prefabIndex;
+
+        public TerrainTileData GetSerializableData()
+        {
+            return new TerrainTileData(prefabIndex);
+        }
+
+        public void SetFromSerializableData(TerrainTileData data)
+        {
+            prefabIndex = data.prefabIndex;
+        }
 
         private void Start()
         {
             GetComponent<BoxCollider2D>().enabled = false;
             name = name + "(" + prefabIndex + ") [" + indices.i + ", " + indices.j + "]";
         }
+
+        [ContextMenu("Refresh")]
+        private void RefreshFromMenu()
+        {
+            Chunk parentChunk = GetComponentInParent<Chunk>();
+            if (parentChunk)
+            {
+                parentChunk.ReplaceTile(indices, prefabIndex);
+            }
+        }
+
     }
 
 }
