@@ -8,7 +8,7 @@ namespace Assets.Scripts.Components
 {
     public class MapComponent : MonoBehaviour
     {
-        public new Camera camera;
+        public ViewPortComponent viewPort;
         public ChunkComponent defaultChunk;
         public int loadRange = 3;
         [ReadOnly]public int index = 0;
@@ -16,7 +16,6 @@ namespace Assets.Scripts.Components
         
         ChunkComponent[,] loadedChunks;
         int loadAreaWidth;
-        LocationData.Chunk LowerLeftChunkCoordinates;
         
         // Use this for initialization
         void Start()
@@ -25,8 +24,6 @@ namespace Assets.Scripts.Components
             chunkSize = defaultChunk.size;
             loadAreaWidth = loadRange * 2 + 1;
             loadedChunks = new ChunkComponent[loadAreaWidth, loadAreaWidth];
-            LocationData.Coordinates cameraCoordinates = camera.GetComponent<LocationComponent>().coordinates;
-            LowerLeftChunkCoordinates = new LocationData.Chunk(cameraCoordinates.chunk.x - loadRange, cameraCoordinates.chunk.y - loadRange);
 
             ChunkComponent chunkComponent;
             Vector3 positionModifier;
@@ -38,7 +35,7 @@ namespace Assets.Scripts.Components
                     positionModifier = new Vector3(chunkSize * (-loadRange + i), chunkSize * (-loadRange + j));
                     chunkComponent = Instantiate(defaultChunk, transform.position + positionModifier, Quaternion.identity, transform);
                     chunkComponent.loadTilesOutsideViewport = false;
-                    chunkComponent.camera = camera;
+                    chunkComponent.viewPort = viewPort;
                     loadedChunks[i, j] = chunkComponent;
                 }
             }

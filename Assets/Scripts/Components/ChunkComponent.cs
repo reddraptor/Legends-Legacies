@@ -8,13 +8,14 @@ namespace Assets.Scripts.Components
 {
     public class ChunkComponent : MonoBehaviour, IHasSerializableData<ChunkData>
     {
-        public new Camera camera;
+        public ViewPortComponent viewPort;
         public PrefabTables prefabTables;
         public int prefabTableTileSetIndex = 0;
         public TileSet tileSet;
         public int size = 32;
         public bool procedualGeneration = false;
         public bool loadTilesOutsideViewport = false;
+        [ReadOnly]public Vector2 position;
         
         private TerrainTileComponent[,] terrainTileComponents;
         private TerrainTileData[,] terrainTileData;
@@ -48,7 +49,7 @@ namespace Assets.Scripts.Components
 
         public Vector3 GetPositionAtIndices(TerrainTileComponent.Indices tileIndices)
         {
-            return new Vector3(transform.position.x - (terrainTileComponents.GetLength(0) / 2) + tileIndices.i, transform.position.y - (terrainTileComponents.GetLength(1) / 2) + tileIndices.j);
+            return new Vector3(position.x - (size / 2) + tileIndices.i, position.y - (size / 2) + tileIndices.j);
         }
 
         public TerrainTileComponent ReplaceTile(TerrainTileComponent.Indices tileIndices, int prefabIndex)
@@ -119,6 +120,7 @@ namespace Assets.Scripts.Components
         // Update is called once per frame
         void Update()
         {
+            position = transform.position;
             for (int i = 0; i < terrainTileComponents.GetLength(0); i++)
             {
                 for (int j = 0; j < terrainTileComponents.GetLength(1); j++)
@@ -208,21 +210,9 @@ namespace Assets.Scripts.Components
 
         public bool InViewPort(TerrainTileComponent.Indices indices)
         {
-            if (!camera) return false;
-
             if (indices.i < 0 || indices.j < 0 || indices.i >= size || indices.j >= size) return false;
 
-            Vector2 lowerLeft = camera.ViewportToWorldPoint(new Vector3(0, 0));
-            Vector2 upperRight = camera.ViewportToWorldPoint(new Vector3(1, 1));
-
-            Vector2 tilePosition = GetPositionAtIndices(indices);
-
-            if (tilePosition.x + 1 > lowerLeft.x && tilePosition.x - 1 < upperRight.x && tilePosition.y + 1 > lowerLeft.y && tilePosition.y - 1 < upperRight.y)
-            {
-                return true;
-            }
-
-            return false;
+            return viewPort.InView(GetPositionAtIndices(indices));
         }
 
         public void DestroyTile(TerrainTileComponent terrainTile)
