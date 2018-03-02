@@ -11,14 +11,14 @@ namespace Assets.Scripts.Editor.Tests
     public class ChunkTests
     {
         const int TEST_REPLACEMENT_TERRAINTILE_INDEX = 2;
-        TerrainTile.Indices TEST_REPLACEMENT_TILE_INDICES = new TerrainTile.Indices(2, 3);
+        TerrainTileComponent.Indices TEST_REPLACEMENT_TILE_INDICES = new TerrainTileComponent.Indices(2, 3);
         const string TEST_PREFAB_NAME = "Default Chunk";
         const int TEST_TILE_SET_INDEX = 1;
 
         GameObject chunkPrefab;
         GameObject chunkInstance;
-        Chunk chunk;
-        TerrainTile terrainTile;
+        ChunkComponent chunk;
+        TerrainTileComponent terrainTile;
         ChunkData chunkData;
 
         string saveFileName = "chuckSaveTest.sav";
@@ -36,13 +36,13 @@ namespace Assets.Scripts.Editor.Tests
             Assert.That(chunkInstance, Is.Not.Null);
             Assert.That(chunkInstance, Is.TypeOf(typeof(GameObject)));
 
-            chunk = chunkInstance.GetComponent<Chunk>();
+            chunk = chunkInstance.GetComponent<ChunkComponent>();
             Assert.That(chunk, Is.Not.Null);
-            Assert.That(chunk, Is.TypeOf(typeof(Chunk)));
+            Assert.That(chunk, Is.TypeOf(typeof(ChunkComponent)));
 
             terrainTile = chunk.GetTerrainTileAt(TEST_REPLACEMENT_TILE_INDICES);
             Assert.That(terrainTile, Is.Not.Null);
-            Assert.That(terrainTile.prefabIndex, Is.EqualTo(chunk.GetTileSet().defaultIndex));
+            Assert.That(terrainTile.prefabIndex, Is.EqualTo(chunk.TileSet.defaultIndex));
         }
 
         [Test]
@@ -50,14 +50,21 @@ namespace Assets.Scripts.Editor.Tests
         {
             if (chunk == null) CreateChunkTest();
 
-            chunk.SetTileSet(TEST_TILE_SET_INDEX);
+            chunk.tileSet = chunk.prefabTables.tileSetTable[TEST_TILE_SET_INDEX];
 
-            Assert.That(chunk.GetTileSet(), Is.EqualTo(chunk.prefabTables.tileSetTable[TEST_TILE_SET_INDEX]));
-
+            Assert.That(chunk.TileSet, Is.EqualTo(chunk.prefabTables.tileSetTable[TEST_TILE_SET_INDEX]));
+            
             terrainTile = chunk.GetTerrainTileAt(TEST_REPLACEMENT_TILE_INDICES);
             Assert.That(terrainTile, Is.Not.Null);
-            Assert.That(terrainTile.prefabIndex, Is.EqualTo(chunk.GetTileSet().defaultIndex));
+            Assert.That(terrainTile.prefabIndex, Is.EqualTo(chunk.TileSet.defaultIndex));
+
+            chunk.tileSet = null;
+            chunk.prefabTableTileSetIndex = TEST_TILE_SET_INDEX;
+
+            Assert.That(chunk.TileSet, Is.EqualTo(chunk.prefabTables.tileSetTable[TEST_TILE_SET_INDEX]));
         }
+
+
 
         [Test]
         public void ReplaceTileTest()

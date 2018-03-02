@@ -7,20 +7,21 @@ using Assets.Scripts.ScriptableObjects;
 public class TerrainTile_TilePrefabs : EditorWindow
 {
     string tileName;
-    TerrainTile terrainTile;
+    TerrainTileComponent terrainTile;
     GameObject selection;
-    Chunk parentChunk;
+    ChunkComponent parentChunk;
     TileSet tileSet;
     int prefabSelect;
-    TerrainTile.Indices indices;
+    TerrainTileComponent.Indices indices;
     GUIContent[] tileSetContents;
-    
 
-    [MenuItem("CONTEXT/TerrainTile/Tile Prefabs")]
+
+    [MenuItem("CONTEXT/TerrainTileComponent/Tile Prefabs")]
     public static void ShowWindow()
     {
         GetWindow(typeof(TerrainTile_TilePrefabs));
     }
+
 
     private void OnInspectorUpdate()
     {
@@ -30,9 +31,9 @@ public class TerrainTile_TilePrefabs : EditorWindow
     void OnGUI()
     {
         selection = Selection.activeGameObject;
-        if (selection) terrainTile = selection.GetComponent<TerrainTile>();
-        if (terrainTile) parentChunk = terrainTile.GetComponentInParent<Chunk>();
-        if (parentChunk) tileSet = parentChunk.GetTileSet();
+        if (selection) terrainTile = selection.GetComponent<TerrainTileComponent>();
+        if (terrainTile) parentChunk = terrainTile.GetComponentInParent<ChunkComponent>();
+        if (parentChunk) tileSet = parentChunk.TileSet;
 
         titleContent.text = "Tile Prefabs";
 
