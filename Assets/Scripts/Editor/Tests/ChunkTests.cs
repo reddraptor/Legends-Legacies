@@ -5,13 +5,14 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using Assets.Scripts.Serialization;
 using Assets.Scripts.Components;
+using Assets.Scripts.Helpers;
 
 namespace Assets.Scripts.Editor.Tests
 {
     public class ChunkTests
     {
         const int TEST_REPLACEMENT_TERRAINTILE_INDEX = 2;
-        TerrainTileComponent.Indices TEST_REPLACEMENT_TILE_INDICES = new TerrainTileComponent.Indices(2, 3);
+        Indices TEST_REPLACEMENT_TILE_INDICES = new Indices(2, 3);
         const string TEST_PREFAB_NAME = "Default Chunk";
         const int TEST_TILE_SET_INDEX = 1;
 

@@ -3,6 +3,7 @@ using UnityEngine;
 using Assets.Scripts.EditorAttributes;
 using Assets.Scripts.Serialization;
 using Assets.Scripts.ScriptableObjects;
+using Assets.Scripts.Helpers;
 
 namespace Assets.Scripts.Components
 {
@@ -13,14 +14,17 @@ namespace Assets.Scripts.Components
         public int prefabTableTileSetIndex = 0;
         public TileSet tileSet;
         public int size = 32;
-        public bool procedualGeneration = false;
+        public bool proceduralGeneration = false;
         public bool loadTilesOutsideViewport = false;
-        [ReadOnly]public Vector2 position;
+        [ReadOnly] public Indices mapLoadAreaIndices;
+        [ReadOnly] public Vector2 worldPosition;
+        [ReadOnly] public Vector2 lowerLeftCorner;
+        [ReadOnly] public Vector2 upperRightCorner;
         
         private TerrainTileComponent[,] terrainTileComponents;
         private TerrainTileData[,] terrainTileData;
 
-        public TerrainTileComponent GetTerrainTileAt(TerrainTileComponent.Indices tileIndices)
+        public TerrainTileComponent GetTerrainTileAt(Indices tileIndices)
         {
             if (terrainTileComponents == null) Start();
             return terrainTileComponents[tileIndices.i, tileIndices.j];
@@ -47,19 +51,19 @@ namespace Assets.Scripts.Components
             }
         }
 
-        public Vector3 GetPositionAtIndices(TerrainTileComponent.Indices tileIndices)
+        public Vector3 GetPositionAtIndices(Indices tileIndices)
         {
-            return new Vector3(position.x - (size / 2) + tileIndices.i, position.y - (size / 2) + tileIndices.j);
+            return new Vector3(worldPosition.x - (size / 2) + tileIndices.i, worldPosition.y - (size / 2) + tileIndices.j);
         }
 
-        public TerrainTileComponent ReplaceTile(TerrainTileComponent.Indices tileIndices, int prefabIndex)
+        public TerrainTileComponent ReplaceTile(Indices tileIndices, int prefabIndex)
         {
             terrainTileData[tileIndices.i, tileIndices.j].prefabIndex = prefabIndex;
             
             if (terrainTileComponents == null) Start();
 
             if (loadTilesOutsideViewport || InViewPort(tileIndices))
-                return InstantiateTile(tileIndices, prefabIndex);
+                return LoadTerrainTile(tileIndices, prefabIndex);
             else
                 return null;
         }
@@ -74,14 +78,14 @@ namespace Assets.Scripts.Components
                 {
                     for (int j = 0; j < size; j++)
                     {
-                        if (loadTilesOutsideViewport || InViewPort(new TerrainTileComponent.Indices(i, j)))
-                            InstantiateTile(new TerrainTileComponent.Indices(i, j), terrainTileData[i, j].prefabIndex);
+                        if (loadTilesOutsideViewport || InViewPort(new Indices(i, j)))
+                            LoadTerrainTile(new Indices(i, j), terrainTileData[i, j].prefabIndex);
                     }
                 }
             }
         }
 
-        internal void ResetTilePosition(TerrainTileComponent.Indices tileIndices)
+        internal void ResetTilePosition(Indices tileIndices)
         {
             terrainTileComponents[tileIndices.i, tileIndices.j].transform.position = GetPositionAtIndices(tileIndices);
         }
@@ -120,7 +124,12 @@ namespace Assets.Scripts.Components
         // Update is called once per frame
         void Update()
         {
-            position = transform.position;
+            worldPosition = transform.position;
+            lowerLeftCorner.x = worldPosition.x - (size / 2);
+            lowerLeftCorner.y = worldPosition.y - (size / 2);
+            upperRightCorner.x = lowerLeftCorner.x + size;
+            upperRightCorner.x = upperRightCorner.y + size;
+
             for (int i = 0; i < terrainTileComponents.GetLength(0); i++)
             {
                 for (int j = 0; j < terrainTileComponents.GetLength(1); j++)
@@ -136,23 +145,23 @@ namespace Assets.Scripts.Components
                         if (terrainTile.transform.position != GetPositionAtIndices(terrainTile.indices)) ResetTilePosition(terrainTile.indices);
 
                         // If we don't want have loaded tile outside of viewport, unload the tile gameobject if necessary
-                        if (!loadTilesOutsideViewport && !InViewPort(new TerrainTileComponent.Indices(i, j)))
+                        if (!loadTilesOutsideViewport && !InViewPort(new Indices(i, j)))
                         {
-                            DestroyTile(terrainTile);
+                            UnloadTerrainTile(terrainTile);
                         }
                     }
                     else
                     {
-                        if (loadTilesOutsideViewport || InViewPort(new TerrainTileComponent.Indices(i, j)))
+                        if (loadTilesOutsideViewport || InViewPort(new Indices(i, j)))
                         {
-                            InstantiateTile(new TerrainTileComponent.Indices(i, j), terrainTileData[i,j].prefabIndex);
+                            LoadTerrainTile(new Indices(i, j), terrainTileData[i,j].prefabIndex);
                         }
                     }
                 }
             }
         }
 
-        private TerrainTileComponent InstantiateTile(TerrainTileComponent.Indices tileIndices, int terrainTilePrefabIndex)
+        private TerrainTileComponent LoadTerrainTile(Indices tileIndices, int terrainTilePrefabIndex)
         {
             if (tileIndices.i < terrainTileComponents.GetLength(0) && tileIndices.i >= 0 &&
                 tileIndices.j < terrainTileComponents.GetLength(1) && tileIndices.j >= 0 &&
@@ -166,7 +175,7 @@ namespace Assets.Scripts.Components
                 {
                     if (terrainTileComponents[tileIndices.i, tileIndices.j])
                     {
-                        DestroyTile(terrainTileComponents[tileIndices.i, tileIndices.j]);
+                        UnloadTerrainTile(terrainTileComponents[tileIndices.i, tileIndices.j]);
                     }
                     terrainTileComponents[tileIndices.i, tileIndices.j] = terrainTile;
                     terrainTileComponents[tileIndices.i, tileIndices.j].indices = tileIndices;
@@ -208,14 +217,14 @@ namespace Assets.Scripts.Components
             Reload();
         }
 
-        public bool InViewPort(TerrainTileComponent.Indices indices)
+        public bool InViewPort(Indices indices)
         {
             if (indices.i < 0 || indices.j < 0 || indices.i >= size || indices.j >= size) return false;
 
             return viewPort.InView(GetPositionAtIndices(indices));
         }
 
-        public void DestroyTile(TerrainTileComponent terrainTile)
+        public void UnloadTerrainTile(TerrainTileComponent terrainTile)
         {
             #if UNITY_EDITOR
                         DestroyImmediate(terrainTile.gameObject);

@@ -2,24 +2,12 @@
 using UnityEngine;
 using Assets.Scripts.EditorAttributes;
 using Assets.Scripts.Serialization;
-using UnityEditor;
+using Assets.Scripts.Helpers;
 
 namespace Assets.Scripts.Components
 {
     public class TerrainTileComponent : MonoBehaviour, IHasSerializableData<TerrainTileData>
     {
-
-        [Serializable]
-        public class Indices
-        {
-            [ReadOnly] public int i = 0;
-            [ReadOnly] public int j = 0;
-
-            public Indices(int i, int j)
-            {
-                this.i = i; this.j = j;
-            }
-        }
 
         public enum TerrainType { Land, Water, Wall }
 
@@ -43,16 +31,7 @@ namespace Assets.Scripts.Components
             GetComponent<BoxCollider2D>().enabled = false;
             name = name + "(" + prefabIndex + ") [" + indices.i + ", " + indices.j + "]";
         }
-
-        [ContextMenu("Refresh")]
-        private void RefreshFromMenu()
-        {
-            ChunkComponent parentChunk = GetComponentInParent<ChunkComponent>();
-            if (parentChunk)
-            {
-                parentChunk.ReplaceTile(indices, prefabIndex);
-            }
-        }
+        
     }
 
 }

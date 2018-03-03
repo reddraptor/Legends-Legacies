@@ -2,6 +2,7 @@
 using UnityEditor;
 using Assets.Scripts.Components;
 using Assets.Scripts.ScriptableObjects;
+using Assets.Scripts.Helpers;
 
 
 public class TerrainTile_TilePrefabs : EditorWindow
@@ -12,7 +13,7 @@ public class TerrainTile_TilePrefabs : EditorWindow
     ChunkComponent parentChunk;
     TileSet tileSet;
     int prefabSelect;
-    TerrainTileComponent.Indices indices;
+    Indices indices;
     GUIContent[] tileSetContents;
 
 
