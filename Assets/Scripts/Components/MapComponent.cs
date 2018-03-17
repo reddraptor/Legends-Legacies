@@ -11,19 +11,19 @@ namespace Assets.Scripts.Components
     public class MapComponent : MonoBehaviour
     {
         [ReadOnly] public int worldMapIndex = 0;
-        public ViewPortComponent viewPort;
+        public ViewportComponent viewPort;
         public ChunkComponent defaultChunk;
         public int chunkSize;
         public bool chunkLoadingEnabled = true;
         public Vector2 worldPosition;
         public LocationData.Coordinates centerCoordinates;
-        public LoadedAreaComponent loadedArea;
+        public AreaLoaderComponent loadedArea;
         
         // Use this for initialization
         void Start()
         {
             transform.position = Vector2.zero;
-            loadedArea = GetComponentInChildren<LoadedAreaComponent>();
+            loadedArea = GetComponentInChildren<AreaLoaderComponent>();
             centerCoordinates = new LocationData.Coordinates(0, 0, chunkSize / 2, chunkSize / 2);
         }
 

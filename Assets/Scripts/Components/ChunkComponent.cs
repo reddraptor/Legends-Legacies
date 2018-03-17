@@ -9,7 +9,8 @@ namespace Assets.Scripts.Components
 {
     public class ChunkComponent : MonoBehaviour, IHasSerializableData<ChunkData>
     {
-        public ViewPortComponent viewPort;
+        public ViewportComponent viewPort;
+        public LocationComponent location;
         public PrefabTables prefabTables;
         public int prefabTableTileSetIndex = 0;
         public TileSet tileSet;
@@ -93,6 +94,7 @@ namespace Assets.Scripts.Components
         // Use this for initialization
         void Start()
         {
+            location = GetComponent<LocationComponent>();
             Initialize();
         }
 
@@ -221,7 +223,7 @@ namespace Assets.Scripts.Components
         {
             if (indices.i < 0 || indices.j < 0 || indices.i >= size || indices.j >= size) return false;
 
-            return viewPort.InView(GetPositionAtIndices(indices));
+            return viewPort.InView(location.map, GetPositionAtIndices(indices));
         }
 
         public void UnloadTerrainTile(TerrainTileComponent terrainTile)

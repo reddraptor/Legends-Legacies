@@ -5,7 +5,7 @@ using Assets.Scripts.EditorAttributes;
 
 namespace Assets.Scripts.Components
 {
-    public class ViewPortComponent : MonoBehaviour
+    public class ViewportComponent : MonoBehaviour
     {
         public MapComponent map;
         public new Camera camera;
@@ -28,13 +28,17 @@ namespace Assets.Scripts.Components
         {
             lowerLeftPosition = camera.ViewportToWorldPoint(viewPortLowerLeft);
             upperRightPosition = camera.ViewportToWorldPoint(viewPortUpperRight);
+            map = location.map;
         }
 
-        public bool InView(Vector2 position)
+        public bool InView(MapComponent givenMap, Vector2 givenPosition)
         {
-            if (position.x + 1 > lowerLeftPosition.x && position.x - 1 < upperRightPosition.x && position.y + 1 > lowerLeftPosition.y && position.y - 1 < upperRightPosition.y)
+            if (givenMap == map)
             {
-                return true;
+                if (givenPosition.x + 1 > lowerLeftPosition.x && givenPosition.x - 1 < upperRightPosition.x && givenPosition.y + 1 > lowerLeftPosition.y && givenPosition.y - 1 < upperRightPosition.y)
+                {
+                    return true;
+                }
             }
 
             return false;

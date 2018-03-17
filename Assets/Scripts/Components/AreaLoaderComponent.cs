@@ -5,7 +5,7 @@ using Assets.Scripts.EditorAttributes;
 
 namespace Assets.Scripts.Components
 {
-    public class LoadedAreaComponent : MonoBehaviour
+    public class AreaLoaderComponent : MonoBehaviour
     {
         public int range = 3;
         [ReadOnly] public int width;
