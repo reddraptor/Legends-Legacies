@@ -28,7 +28,6 @@ namespace Assets.Scripts.Components
         {
             lowerLeftPosition = camera.ViewportToWorldPoint(viewPortLowerLeft);
             upperRightPosition = camera.ViewportToWorldPoint(viewPortUpperRight);
-            location.SetFromWorldPosition(transform.position);
         }
 
         public bool InView(Vector2 position)

@@ -21,10 +21,12 @@ namespace Assets.Scripts.Components
             coordinates = data.coordinates;
         }
 
-        public void SetFromWorldPosition(Vector2 position)
+        void SetFromWorldPosition()
         {
-            float positionDifferenceX = position.x - map.worldPosition.x;
-            float positionDifferenceY = position.y - map.worldPosition.y;
+            if (!map) return;
+
+            float positionDifferenceX = transform.position.x - map.worldPosition.x;
+            float positionDifferenceY = transform.position.y - map.worldPosition.y;
 
             long chunkDifferenceX = (long)((map.centerCoordinates.indices.i + positionDifferenceX) / map.chunkSize);
             long chunkDifferenceY = (long)((map.centerCoordinates.indices.j + positionDifferenceY) / map.chunkSize);
@@ -35,6 +37,12 @@ namespace Assets.Scripts.Components
             coordinates.indices.i = (int)(map.centerCoordinates.indices.i + positionDifferenceX - chunkDifferenceX * map.chunkSize);
             coordinates.indices.j = (int)(map.centerCoordinates.indices.j + positionDifferenceY - chunkDifferenceY * map.chunkSize);
         }
+
+        void Update()
+        {
+            SetFromWorldPosition();
+        }
+        
     }
 
 }

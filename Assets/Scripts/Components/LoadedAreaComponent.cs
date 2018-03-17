@@ -16,7 +16,6 @@ namespace Assets.Scripts.Components
 
         private ChunkComponent[,] chunks;
 
-
         void Load()
         {
             ChunkComponent chunk;
@@ -74,7 +73,6 @@ namespace Assets.Scripts.Components
         void Update()
         {
             worldPosition = transform.position;
-            location.SetFromWorldPosition(worldPosition);
             if (reload)
             {
                 Load();
