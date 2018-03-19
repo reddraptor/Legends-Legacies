@@ -6,18 +6,17 @@ namespace Assets.Scripts.Components
 {
     public class LocationComponent : MonoBehaviour, IHasSerializableData<LocationData>
     {
-        public int mapIndex;
         public MapComponent map;
         public LocationData.Coordinates coordinates;
 
         public LocationData GetSerializableData()
         {
-            return new LocationData(mapIndex, coordinates);
+            return new LocationData(map.worldMapIndex, coordinates);
         }
 
         public void SetFromSerializableData(LocationData data)
         {
-            mapIndex = data.mapIndex;
+            //map = data.mapIndex;
             coordinates = data.coordinates;
         }
 

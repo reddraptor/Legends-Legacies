@@ -5,48 +5,48 @@ using Assets.Scripts.EditorAttributes;
 
 namespace Assets.Scripts.Components
 {
+    [RequireComponent(typeof(LocationComponent), typeof(ViewportComponent))]
     public class AreaLoaderComponent : MonoBehaviour
     {
         public int range = 3;
         [ReadOnly] public int width;
-        public MapComponent map;
         public LocationComponent location;
+        public ViewportComponent viewport;
         public Vector2 worldPosition;
-        public bool reload = false;
+        public bool chunkLoadingEnabled = true;
+        public bool reload = true;
 
         private ChunkComponent[,] chunks;
 
-        void Load()
+        void LoadArea()
         {
-            ChunkComponent chunk;
-
             for (int i = 0; i < width; i++)
             {
                 for (int j = 0; j < width; j++)
                 {
-                    if (!(chunk = chunks[i, j])) LoadChunk(new Indices(i, j));
+                    if (!chunks[i, j]) chunks[i,j] = LoadChunk(new Indices(i, j));
                 }
             }
         }
 
         ChunkComponent LoadChunk(Indices chunkIndices)
         {
-            ChunkComponent chunkComponent = map.defaultChunk;
+            ChunkComponent chunk = location.map.defaultChunk;
 
-            chunkComponent = Instantiate(chunkComponent,
+            chunk = Instantiate(chunk,
                 new Vector3(
-                    worldPosition.x + (-range + chunkIndices.i) * map.chunkSize,
-                    worldPosition.y + (-range + chunkIndices.j) * map.chunkSize
+                    worldPosition.x + (-range + chunkIndices.i) * location.map.chunkSize,
+                    worldPosition.y + (-range + chunkIndices.j) * location.map.chunkSize
                     ),
-                Quaternion.identity, map.transform);
+                Quaternion.identity, location.map.transform);
+             
+            chunk.loadTilesOutsideViewport = false;
+            chunk.viewport = viewport;
+            chunk.areaLoader = this;
+            chunk.mapLoadAreaIndices = chunkIndices;
+            chunk.name = chunk.name + "[" + chunkIndices.i + ", " + chunkIndices.j + "]";
 
-            chunkComponent.loadTilesOutsideViewport = false;
-            chunkComponent.viewPort = map.viewPort;
-            chunkComponent.mapLoadAreaIndices = chunkIndices;
-            chunkComponent.name = chunkComponent.name + "[" + chunkIndices.i + ", " + chunkIndices.j + "]";
-            chunks[chunkIndices.i, chunkIndices.j] = chunkComponent;
-
-            return chunkComponent;
+            return chunk;
         }
 
         void DestroyChunk(ChunkComponent chunk)
@@ -61,10 +61,9 @@ namespace Assets.Scripts.Components
         // Use this for initialization
         void Start()
         {
-            map = GetComponentInParent<MapComponent>();
             location = GetComponent<LocationComponent>();
-            location.map = map;
-            location.mapIndex = map.worldMapIndex;
+            viewport = GetComponent<ViewportComponent>();
+            worldPosition = transform.position;
             width = range * 2 + 1;
             chunks = new ChunkComponent[width, width];
         }
@@ -73,9 +72,9 @@ namespace Assets.Scripts.Components
         void Update()
         {
             worldPosition = transform.position;
-            if (reload)
+            if (location.map & chunkLoadingEnabled & reload == true)
             {
-                Load();
+                LoadArea();
                 reload = false;
             }
         }

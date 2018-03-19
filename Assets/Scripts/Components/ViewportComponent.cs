@@ -5,6 +5,7 @@ using Assets.Scripts.EditorAttributes;
 
 namespace Assets.Scripts.Components
 {
+    [RequireComponent(typeof(LocationComponent), typeof(Camera))]
     public class ViewportComponent : MonoBehaviour
     {
         public MapComponent map;

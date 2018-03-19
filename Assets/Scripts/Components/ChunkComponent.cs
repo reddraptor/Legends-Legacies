@@ -9,7 +9,8 @@ namespace Assets.Scripts.Components
 {
     public class ChunkComponent : MonoBehaviour, IHasSerializableData<ChunkData>
     {
-        public ViewportComponent viewPort;
+        public ViewportComponent viewport;
+        public AreaLoaderComponent areaLoader;
         public LocationComponent location;
         public PrefabTables prefabTables;
         public int prefabTableTileSetIndex = 0;
@@ -69,7 +70,7 @@ namespace Assets.Scripts.Components
                 return null;
         }
 
-        private void Reload()
+        private void Load()
         {
             if (terrainTileComponents == null)
                 Initialize();
@@ -95,6 +96,7 @@ namespace Assets.Scripts.Components
         void Start()
         {
             location = GetComponent<LocationComponent>();
+            if (areaLoader) location.map = areaLoader.location.map;
             Initialize();
         }
 
@@ -120,7 +122,7 @@ namespace Assets.Scripts.Components
                 terrainTileData[terrainTileComponent.indices.i, terrainTileComponent.indices.j] = terrainTileComponent.GetSerializableData();
             }
 
-            Reload();
+            Load();
         }
 
         // Update is called once per frame
@@ -216,14 +218,14 @@ namespace Assets.Scripts.Components
             TileSet = prefabTables.tileSetTable[prefabTableTileSetIndex];
             terrainTileData = data.terrainTileData;
 
-            Reload();
+            Load();
         }
 
         public bool InViewPort(Indices indices)
         {
             if (indices.i < 0 || indices.j < 0 || indices.i >= size || indices.j >= size) return false;
 
-            return viewPort.InView(location.map, GetPositionAtIndices(indices));
+            return viewport.InView(location.map, GetPositionAtIndices(indices));
         }
 
         public void UnloadTerrainTile(TerrainTileComponent terrainTile)
@@ -238,7 +240,7 @@ namespace Assets.Scripts.Components
         [ContextMenu("Reload Chunk")]
         private void ReloadFromMenu()
         {
-            Reload();
+            Load();
         }
     }
 
